@@ -67,7 +67,12 @@ namespace CourseLibrary.API.Services
 
         public void UpdateCourse(Course course)
         {
-            // no code in this implementation
+            // no code neede in this implementation
+            //EF is tracking the entity
+            //by doing _mapper.map in controller the entity is marked as "modified"
+            //so when executing the Save method, the new values are stored in the DB
+
+
         }
 
         public void AddAuthor(Author author)
@@ -78,12 +83,14 @@ namespace CourseLibrary.API.Services
             }
 
             // the repository fills the id (instead of using identity columns)
+            //to be commented out if the ID field is marked as IdentityColumn
             author.Id = Guid.NewGuid();
 
             foreach (var course in author.Courses)
             {
                 course.Id = Guid.NewGuid();
             }
+
 
             _context.Authors.Add(author);
         }

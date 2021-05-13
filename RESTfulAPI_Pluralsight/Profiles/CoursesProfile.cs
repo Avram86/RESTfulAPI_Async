@@ -13,6 +13,8 @@ namespace RESTfulAPI_Pluralsight.Profiles
         public CoursesProfile()
         {
             CreateMap<Course, CourseDto>();
+            CreateMap<CourseForCreationDto, Course>();
+            CreateMap<CourseForUpdateDto, Course>();
         }
         
     }

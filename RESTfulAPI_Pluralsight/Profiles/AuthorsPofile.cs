@@ -13,6 +13,8 @@ namespace RESTfulAPI_Pluralsight.Profiles
         public AuthorsPofile()
         {
             CreateMap<Author, AuthorDto>();
+            CreateMap<AuthorForCreationDto, Author>();
+            CreateMap<AuthorForUpdateDto, Author>();
         }
     }
 }
