@@ -46,7 +46,7 @@ namespace RESTfulAPI_Pluralsight.Controller
         }
 
         [HttpPost]
-        public ActionResult<IEnumerable<AuthorDto>> CreateAuthorCollection(IEnumerable<AuthorForCreationDto> authorCollection)
+        public async Task<ActionResult<IEnumerable<AuthorDto>>> CreateAuthorCollection(IEnumerable<AuthorForCreationDto> authorCollection)
         {
             var authorEntities = _mapper.Map<IEnumerable<Author>>(authorCollection);
 
@@ -54,7 +54,7 @@ namespace RESTfulAPI_Pluralsight.Controller
             {
                 _courseLibraryRepository.AddAuthor(author);
             }
-            _courseLibraryRepository.Save();
+            await _courseLibraryRepository.SaveAsync();
 
             var authorCollectionToReturn = _mapper.Map<IEnumerable<AuthorDto>>(authorEntities);
             var idsAsString = string.Join(",", authorCollectionToReturn.Select(a=>a.Id));

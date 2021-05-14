@@ -47,11 +47,12 @@ namespace RESTfulAPI_Pluralsight.Controller
         }
 
         [HttpPost]
-        public ActionResult<AuthorDto> CreateAuthor(AuthorForCreationDto authorForCreationDto)
+        public async Task<ActionResult<AuthorDto>> CreateAuthor(AuthorForCreationDto authorForCreationDto)
         {
             var authorEntity = _mapper.Map<Author>(authorForCreationDto);
+
             _courseLibraryRepository.AddAuthor(authorEntity);
-            _courseLibraryRepository.Save();
+            await _courseLibraryRepository.SaveAsync();
 
             var authorToReturn = _mapper.Map<AuthorDto>(authorEntity);
             return CreatedAtRoute("GetAuthor", new { authorId=authorToReturn.Id}, authorToReturn);
@@ -70,7 +71,7 @@ namespace RESTfulAPI_Pluralsight.Controller
             _mapper.Map(authorForUpdateDto, authorFromRepo);
 
             _courseLibraryRepository.UpdateAuthor(authorFromRepo);
-            _courseLibraryRepository.Save();
+            await _courseLibraryRepository.SaveAsync();
 
             return NoContent();
         }
@@ -85,7 +86,7 @@ namespace RESTfulAPI_Pluralsight.Controller
             }
 
             _courseLibraryRepository.DeleteAuthor(authorFromRepo);
-            _courseLibraryRepository.Save();
+            await _courseLibraryRepository.SaveAsync();
 
             return NoContent();
         }

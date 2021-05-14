@@ -184,9 +184,9 @@ namespace CourseLibrary.API.Services
             // no code in this implementation
         }
 
-        public bool Save()
+        public async Task<bool> SaveAsync()
         {
-            return (_context.SaveChanges() >= 0);
+            return (await _context.SaveChangesAsync() >= 0);
         }
 
         public void Dispose()

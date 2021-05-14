@@ -53,7 +53,7 @@ namespace RESTfulAPI_Pluralsight.Controller
         }
 
         [HttpPost]
-        public ActionResult<CourseDto> CreatecourseForAction(Guid authorId, CourseForCreationDto courseForCreation)
+        public async Task<ActionResult<CourseDto>> CreatecourseForAction(Guid authorId, CourseForCreationDto courseForCreation)
         {
             if (!_courseLibraryRepository.AuthorExists(authorId))
             {
@@ -63,7 +63,7 @@ namespace RESTfulAPI_Pluralsight.Controller
             var courseEntity = _mapper.Map<Course>(courseForCreation);
 
             _courseLibraryRepository.AddCourse(authorId, courseEntity);
-            _courseLibraryRepository.Save();
+            await _courseLibraryRepository.SaveAsync();
 
             var courseToReturn = _mapper.Map<CourseDto>(courseEntity);
 
@@ -88,7 +88,7 @@ namespace RESTfulAPI_Pluralsight.Controller
                 courseToAdd.Id = courseId;
 
                 _courseLibraryRepository.AddCourse(authorId ,courseToAdd);
-                _courseLibraryRepository.Save();
+                await _courseLibraryRepository.SaveAsync();
 
                 var courseToReturn = _mapper.Map<CourseDto>(courseToAdd);
 
@@ -104,7 +104,7 @@ namespace RESTfulAPI_Pluralsight.Controller
             _mapper.Map(courseForUpdateDto, courseForAuthorFromRepo);
 
             _courseLibraryRepository.UpdateCourse(courseForAuthorFromRepo);
-            _courseLibraryRepository.Save();
+            await _courseLibraryRepository.SaveAsync();
 
             return NoContent();
         }
@@ -125,7 +125,7 @@ namespace RESTfulAPI_Pluralsight.Controller
             }
 
             _courseLibraryRepository.DeleteCourse(courseToBeDeletedFromRepo);
-            _courseLibraryRepository.Save();
+            await _courseLibraryRepository.SaveAsync();
 
             return NoContent();
         }
