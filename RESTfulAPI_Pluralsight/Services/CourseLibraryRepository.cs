@@ -1,9 +1,11 @@
 ﻿using CourseLibrary.API.DbContexts;
 using CourseLibrary.API.Entities;
+using Microsoft.EntityFrameworkCore;
 using RESTfulAPI_Pluralsight.ResourceParameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CourseLibrary.API.Services
 {
@@ -37,7 +39,7 @@ namespace CourseLibrary.API.Services
             _context.Courses.Remove(course);
         }
   
-        public Course GetCourse(Guid authorId, Guid courseId)
+        public async Task<Course> GetCourseAsync(Guid authorId, Guid courseId)
         {
             if (authorId == Guid.Empty)
             {
@@ -49,20 +51,20 @@ namespace CourseLibrary.API.Services
                 throw new ArgumentNullException(nameof(courseId));
             }
 
-            return _context.Courses
-              .Where(c => c.AuthorId == authorId && c.Id == courseId).FirstOrDefault();
+            return await _context.Courses
+              .Where(c => c.AuthorId == authorId && c.Id == courseId).FirstOrDefaultAsync();
         }
 
-        public IEnumerable<Course> GetCourses(Guid authorId)
+        public async Task<IEnumerable<Course>> GetCoursesAsync(Guid authorId)
         {
             if (authorId == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(authorId));
             }
 
-            return _context.Courses
+            return await _context.Courses
                         .Where(c => c.AuthorId == authorId)
-                        .OrderBy(c => c.Title).ToList();
+                        .OrderBy(c => c.Title).ToListAsync();
         }
 
         public void UpdateCourse(Course course)
@@ -115,34 +117,34 @@ namespace CourseLibrary.API.Services
             _context.Authors.Remove(author);
         }
         
-        public Author GetAuthor(Guid authorId)
+        public async Task<Author> GetAuthorAsync(Guid authorId)
         {
             if (authorId == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(authorId));
             }
 
-            return _context.Authors.FirstOrDefault(a => a.Id == authorId);
+            return await _context.Authors.FirstOrDefaultAsync(a => a.Id == authorId);
         }
 
-        public IEnumerable<Author> GetAuthors()
+        public async Task<IEnumerable<Author>> GetAuthorsAsync()
         {
-            return _context.Authors.ToList<Author>();
+            return await _context.Authors.ToListAsync<Author>();
         }
 
         //added for filtering
-        public IEnumerable<Author> GetAuthors(
+        public async Task<IEnumerable<Author>> GetAuthorsAsync(
             AuthorsResourceParameters authorsResourceParameters)
         {
             if (authorsResourceParameters==null)
             {
-                return GetAuthors();
+                return await GetAuthorsAsync();
             }
 
             if (string.IsNullOrWhiteSpace(authorsResourceParameters.MainCategory) 
                 && string.IsNullOrWhiteSpace(authorsResourceParameters.SearchQuery))
             {
-                return GetAuthors();
+                return await GetAuthorsAsync();
             }
 
             var collection = _context.Authors as IQueryable<Author>;
@@ -160,21 +162,21 @@ namespace CourseLibrary.API.Services
                                                  || a.FirstName.Contains(searchQuery)
                                                  || a.LastName.Contains(searchQuery));
             }
-            return collection.ToList();
+            return await collection.ToListAsync();
 
         }
 
-        public IEnumerable<Author> GetAuthors(IEnumerable<Guid> authorIds)
+        public async Task<IEnumerable<Author>> GetAuthorsAsync(IEnumerable<Guid> authorIds)
         {
             if (authorIds == null)
             {
                 throw new ArgumentNullException(nameof(authorIds));
             }
 
-            return _context.Authors.Where(a => authorIds.Contains(a.Id))
+            return await _context.Authors.Where(a => authorIds.Contains(a.Id))
                 .OrderBy(a => a.FirstName)
                 .OrderBy(a => a.LastName)
-                .ToList();
+                .ToListAsync();
         }
 
         public void UpdateAuthor(Author author)
@@ -197,7 +199,10 @@ namespace CourseLibrary.API.Services
         {
             if (disposing)
             {
-               // dispose resources when needed
+                if (_context != null)
+                {
+                    _context.Dispose();
+                }
             }
         }
     }
