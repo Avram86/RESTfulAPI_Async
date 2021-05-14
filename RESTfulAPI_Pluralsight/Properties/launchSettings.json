@@ -2,28 +2,24 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/RESTfulAPI_Aync",
+      "sslPort": 0
+    },
     "iisExpress": {
-      "applicationUrl": "https://localhost:44364",
-      "sslPort": 44364
+      "applicationUrl": "http://localhost:44332",
+      "sslPort": 44333
     }
   },
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:44364/"
-    },
-    "RESTfulAPI_Pluralsight": {
+    "RESTfulAPI_Aync": {
       "commandName": "Project",
-      "launchBrowser": true,
+        "launchBrowser": true,
+        "launchUrl": "index.html",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "dotnetRunMessages": "true",
-      "applicationUrl": "https://localhost:5001;http://localhost:5000"
+      "applicationUrl": "https://localhost:44333/"
     }
   }
 }
