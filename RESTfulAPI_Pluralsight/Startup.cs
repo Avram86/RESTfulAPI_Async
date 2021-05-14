@@ -37,10 +37,10 @@ namespace CourseLibrary.API
              
             services.AddScoped<ICourseLibraryRepository, CourseLibraryRepository>();
 
+            var connectionString = Configuration["ConnectionStrings:connectionString"];
             services.AddDbContext<CourseLibraryContext>(options =>
             {
-                options.UseSqlServer(
-                    @"Server=(localdb)\mssqllocaldb;Database=CourseLibraryDB;Trusted_Connection=True;");
+                options.UseSqlServer(connectionString);
             });
 
             services.AddSwaggerGen(c =>
