@@ -23,26 +23,26 @@ namespace RESTfulAPI_Pluralsight.Controller
         }
 
         [HttpGet()]
-        public ActionResult<IEnumerable<CourseDto>> GetCoursesForAuthor(Guid authorId)
+        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCoursesForAuthorAsync(Guid authorId)
         {
             if (!_courseLibraryRepository.AuthorExists(authorId))
             {
                 return NotFound();
             }
 
-            var coursesFromRepo = _courseLibraryRepository.GetCourses(authorId);
+            var coursesFromRepo =await _courseLibraryRepository.GetCoursesAsync(authorId);
             return Ok(_mapper.Map<IEnumerable<CourseDto>>(coursesFromRepo));
         }
 
         [HttpGet("{courseId}", Name ="GetCourseForAuthor")]
-        public ActionResult<IEnumerable<CourseDto>> GetCourseForAuthor(Guid authorId, Guid courseId)
+        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCourseForAuthorAsync(Guid authorId, Guid courseId)
         {
             if (!_courseLibraryRepository.AuthorExists(authorId))
             {
                 return NotFound();
             }
 
-            var course = _courseLibraryRepository.GetCourse(authorId, courseId);
+            var course =await _courseLibraryRepository.GetCourseAsync(authorId, courseId);
 
             if (course == null)
             {
@@ -73,14 +73,14 @@ namespace RESTfulAPI_Pluralsight.Controller
         }
 
         [HttpPut("{courseId}")]
-        public IActionResult UpdateCourseForAuthor(Guid authorId, Guid courseId, CourseForUpdateDto courseForUpdateDto)
+        public async Task<IActionResult> UpdateCourseForAuthorAsync(Guid authorId, Guid courseId, CourseForUpdateDto courseForUpdateDto)
         {
             if(!_courseLibraryRepository.AuthorExists(authorId))
             {
                 return NotFound();
             }
 
-            var courseForAuthorFromRepo = _courseLibraryRepository.GetCourse(authorId, courseId);
+            var courseForAuthorFromRepo =await _courseLibraryRepository.GetCourseAsync(authorId, courseId);
 
             if (courseForAuthorFromRepo == null)
             {
@@ -110,14 +110,14 @@ namespace RESTfulAPI_Pluralsight.Controller
         }
 
         [HttpDelete("{courseId}")]
-        public IActionResult DeleteCourseForAuthor(Guid authorId, Guid CourseId)
+        public async Task<IActionResult> DeleteCourseForAuthorAsync(Guid authorId, Guid CourseId)
         {
             if (!_courseLibraryRepository.AuthorExists(authorId))
             {
                 return NotFound();
             }
 
-            var courseToBeDeletedFromRepo = _courseLibraryRepository.GetCourse(authorId, CourseId);
+            var courseToBeDeletedFromRepo =await _courseLibraryRepository.GetCourseAsync(authorId, CourseId);
 
             if (courseToBeDeletedFromRepo == null)
             {

@@ -25,18 +25,18 @@ namespace RESTfulAPI_Pluralsight.Controller
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<AuthorDto>> GetAuthors(
+        public async Task<ActionResult<IEnumerable<AuthorDto>>> GetAuthors(
             //for filtering
             [FromQuery]AuthorsResourceParameters authorsResourceParameters)
         {
-            var authorsFromRepo = _courseLibraryRepository.GetAuthors(authorsResourceParameters);
+            var authorsFromRepo =await _courseLibraryRepository.GetAuthorsAsync(authorsResourceParameters);
             return Ok(_mapper.Map<IEnumerable<AuthorDto>>(authorsFromRepo));
         }
 
         [HttpGet("{authorId:guid}", Name ="GetAuthor")]
-        public ActionResult<AuthorDto> GetAuthor(Guid authorId)
+        public async Task<ActionResult<AuthorDto>> GetAuthorAsync(Guid authorId)
         {
-            var authorFromRepo = _courseLibraryRepository.GetAuthor(authorId);
+            var authorFromRepo =await _courseLibraryRepository.GetAuthorAsync(authorId);
 
             if (authorFromRepo == null)
             {
@@ -58,9 +58,9 @@ namespace RESTfulAPI_Pluralsight.Controller
         }
 
         [HttpPut("{authorId}")]
-        public IActionResult UpdateAuthor(Guid authorId, AuthorForUpdateDto authorForUpdateDto)
+        public async Task<IActionResult> UpdateAuthor(Guid authorId, AuthorForUpdateDto authorForUpdateDto)
         {
-            var authorFromRepo = _courseLibraryRepository.GetAuthor(authorId);
+            var authorFromRepo =await _courseLibraryRepository.GetAuthorAsync(authorId);
             if (authorFromRepo == null)
             {
                 return NotFound();
@@ -76,9 +76,9 @@ namespace RESTfulAPI_Pluralsight.Controller
         }
         
         [HttpDelete("{authorId}")]
-        public ActionResult DeleteAuthor(Guid authorId)
+        public async Task<ActionResult> DeleteAuthor(Guid authorId)
         {
-            var authorFromRepo = _courseLibraryRepository.GetAuthor(authorId);
+            var authorFromRepo =await _courseLibraryRepository.GetAuthorAsync(authorId);
             if (authorFromRepo == null)
             {
                 return NotFound();

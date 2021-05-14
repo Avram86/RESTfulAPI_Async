@@ -27,14 +27,14 @@ namespace RESTfulAPI_Pluralsight.Controller
         }
 
         [HttpGet("({ids})", Name ="GetAuthorCollection")]
-        public IActionResult GetAuthorCollection([FromRoute] [ModelBinder(BinderType =typeof(ArrayModelBinder))]IEnumerable<Guid> ids)
+        public async Task<IActionResult> GetAuthorCollectionAsync([FromRoute] [ModelBinder(BinderType =typeof(ArrayModelBinder))]IEnumerable<Guid> ids)
         {
             if (ids == null)
             {
                 return BadRequest();
             }
 
-            var authorEntities = _courseLibraryRepository.GetAuthors(ids);
+            var authorEntities =await _courseLibraryRepository.GetAuthorsAsync(ids);
             //check if all authors are found
             if(ids.Count() != authorEntities.Count())
             {
